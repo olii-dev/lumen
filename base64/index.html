@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>base64 - lumen</title>
+<link rel="stylesheet" href="/assets/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><circle cx='8' cy='8' r='6' fill='%237cc7ff'/></svg>">
+</head>
+<body data-tool="base64">
+<main>
+  <div class="panel">
+    <div class="controls" style="margin:0 0 10px; padding:0; border:0; background:none">
+      <button id="enc" class="primary">encode &darr;</button>
+      <button id="dec">decode &uarr;</button>
+      <button id="copyOut">copy output</button>
+      <button id="dlFile" class="ghost" hidden>download decoded file</button>
+      <div class="ctl ctl-summary"><span id="stats"></span></div>
+    </div>
+    <textarea id="in" class="big" placeholder="text or base64 here" spellcheck="false"></textarea>
+    <div class="dz-sub" style="text-align:center;margin:10px 0">&darr;</div>
+    <textarea id="out" class="big" placeholder="output" spellcheck="false"></textarea>
+    <div id="msg" class="msg" style="margin-top:8px"></div>
+    <div class="dropzone" id="dropzone" tabindex="0" style="margin-top:12px; padding:20px">
+      <div class="dz-title" style="font-size:13px">or drop a file to base64 it</div>
+      <input id="fileInput" type="file" hidden>
+    </div>
+  </div>
+  <p class="hint" style="margin-top:14px">encoding runs in your browser. nothing is sent anywhere.</p>
+</main>
+<script src="/assets/common.js"></script>
+<script>
+(() => {
+  const tin = document.getElementById('in'), tout = document.getElementById('out');
+  const msg = document.getElementById('msg'), stats = document.getElementById('stats');
+  const dlFile = document.getElementById('dlFile');
+  let decodedBlob = null;
+  const say = (t, cls) => { msg.textContent = t; msg.className = 'msg ' + cls; };
+  const b64encodeUnicode = (s) => btoa(String.fromCharCode(...new TextEncoder().encode(s)));
+  const b64decodeUnicode = (s) => new TextDecoder().decode(Uint8Array.from(atob(s), (c) => c.charCodeAt(0)));
+
+  document.getElementById('enc').addEventListener('click', () => {
+    try {
+      tout.value = b64encodeUnicode(tin.value);
+      dlFile.hidden = true; decodedBlob = null;
+      say('encoded ' + tin.value.length.toLocaleString() + ' chars', 'ok');
+      stats.textContent = tout.value.length.toLocaleString() + ' chars out';
+    } catch (e) { say('encode failed: ' + e.message, 'err'); }
+  });
+  document.getElementById('dec').addEventListener('click', () => {
+    try {
+      tout.value = b64decodeUnicode(tin.value.trim());
+      dlFile.hidden = true; decodedBlob = null;
+      say('decoded', 'ok');
+      stats.textContent = tout.value.length.toLocaleString() + ' chars out';
+    } catch (e) { say('not valid base64: ' + e.message, 'err'); }
+  });
+  document.getElementById('copyOut').addEventListener('click', (e) => L.copy(tout.value, e.target));
+
+  L.dropzone(document.getElementById('dropzone'), document.getElementById('fileInput'), async (files) => {
+    const f = files[0];
+    if (!f || f.size === 0) return;
+    if (f.size > 25 * 1024 * 1024) { say('file too big (25 MB max)', 'err'); return; }
+    say('encoding ' + f.name + '\u2026', '');
+    const buf = new Uint8Array(await f.arrayBuffer());
+    let bin = '';
+    const CH = 0x8000;
+    for (let i = 0; i < buf.length; i += CH) bin += String.fromCharCode.apply(null, buf.subarray(i, i + CH));
+    tout.value = btoa(bin);
+    tin.value = '[file] ' + f.name + ' \u00b7 ' + L.fmtBytes(f.size);
+    say('encoded ' + f.name, 'ok');
+    stats.textContent = L.fmtBytes(f.size) + ' \u2192 ' + tout.value.length.toLocaleString() + ' chars';
+  });
+})();
+</script>
+</body>
+</html>

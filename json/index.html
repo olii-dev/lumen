@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>json format - lumen</title>
+<link rel="stylesheet" href="/assets/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><circle cx='8' cy='8' r='6' fill='%237cc7ff'/></svg>">
+</head>
+<body data-tool="json format">
+<main>
+  <div class="panel">
+    <textarea id="in" class="big" placeholder='paste json here' spellcheck="false"></textarea>
+    <div class="controls" style="margin:10px 0 0; padding:0; border:0; background:none">
+      <button id="format" class="primary">format</button>
+      <button id="minify">minify</button>
+      <button id="validate">validate</button>
+      <button id="copy">copy</button>
+      <button id="clear" class="ghost">clear</button>
+      <div class="ctl ctl-summary"><span id="stats"></span></div>
+    </div>
+    <div id="msg" class="msg"></div>
+  </div>
+  <p class="hint" style="margin-top:14px">parsing happens in your browser. nothing is sent anywhere.</p>
+</main>
+<script src="/assets/common.js"></script>
+<script>
+(() => {
+  const ta = document.getElementById('in');
+  const msg = document.getElementById('msg');
+  const stats = document.getElementById('stats');
+  const say = (t, cls) => { msg.textContent = t; msg.className = 'msg ' + cls; };
+  const parse = () => {
+    const v = ta.value.trim();
+    if (!v) { say('nothing to parse', 'err'); return null; }
+    try { return JSON.parse(v); }
+    catch (e) { say('invalid json: ' + e.message, 'err'); return undefined; }
+  };
+  const showStats = (s) => {
+    const keys = (s.match(/"(\\.|[^"\\])*"\s*:/g) || []).length;
+    stats.textContent = s.length.toLocaleString() + ' chars \u00b7 ' + keys + ' keys \u00b7 ' + s.split('\n').length + ' lines';
+  };
+  document.getElementById('format').addEventListener('click', () => {
+    const o = parse();
+    if (o == null) return;
+    ta.value = JSON.stringify(o, null, 2);
+    say('valid json - formatted', 'ok'); showStats(ta.value);
+  });
+  document.getElementById('minify').addEventListener('click', () => {
+    const o = parse();
+    if (o == null) return;
+    ta.value = JSON.stringify(o);
+    say('valid json - minified', 'ok'); showStats(ta.value);
+  });
+  document.getElementById('validate').addEventListener('click', () => {
+    const o = parse();
+    if (o == null) return;
+    if (o === undefined) return;
+    say('valid json', 'ok'); showStats(ta.value);
+  });
+  document.getElementById('copy').addEventListener('click', (e) => L.copy(ta.value, e.target));
+  document.getElementById('clear').addEventListener('click', () => { ta.value = ''; say('', ''); stats.textContent = ''; });
+})();
+</script>
+</body>
+</html>

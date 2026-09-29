@@ -3,54 +3,40 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>lumen - heic converter</title>
-<link rel="stylesheet" href="style.css">
+<title>lumen - quick tools</title>
+<link rel="stylesheet" href="/assets/style.css">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><circle cx='8' cy='8' r='6' fill='%237cc7ff'/></svg>">
 </head>
-<body>
-<header>
-  <div class="wordmark">lumen</div>
-  <div class="tagline">heic &rarr; jpg / png / webp &middot; runs fully in your browser &middot; nothing uploads</div>
-</header>
-
+<body data-note="quick tools, no uploads">
 <main>
-  <section id="dropzone" tabindex="0">
-    <div class="dz-inner">
-      <div class="dz-title">drop .heic files here</div>
-      <div class="dz-sub">or click to browse &middot; multiple files fine</div>
-    </div>
-    <input id="fileInput" type="file" accept=".heic,.heif,image/heic,image/heif" multiple hidden>
-  </section>
-
-  <section id="controls" hidden>
-    <div class="ctl">
-      <label for="format">format</label>
-      <select id="format">
-        <option value="jpeg" selected>jpg</option>
-        <option value="png">png</option>
-        <option value="webp">webp</option>
-      </select>
-    </div>
-    <div class="ctl ctl-quality">
-      <label for="quality">quality <span id="qualityVal">92</span></label>
-      <input id="quality" type="range" min="40" max="100" value="92">
-    </div>
-    <div class="ctl ctl-summary">
-      <span id="summary"></span>
-    </div>
-    <button id="downloadAll" disabled>download all (.zip)</button>
-    <button id="clearAll" class="ghost">clear</button>
-  </section>
-
-  <section id="list"></section>
-
-  <footer>
-    <p>heic decoding runs on your device via libheif. re-encoding uses your browser's image encoder. files never leave this tab.</p>
-  </footer>
+  <p class="hub-intro"><b>lumen</b> - quick tools that run fully in your browser. no uploads, no accounts, no tracking.</p>
+  <div class="filter-row"><input id="filter" type="text" placeholder="filter tools" autocomplete="off"></div>
+  <div class="grid" id="grid"></div>
 </main>
-
-<script src="vendor/heic2any.min.js"></script>
-<script src="vendor/jszip.min.js"></script>
-<script src="app.js"></script>
+<script src="/assets/common.js"></script>
+<script>
+const TOOLS = [
+  { url: '/heic/', t: 'heic convert', d: 'iphone heic photos to jpg, png or webp with quality control', tags: ['image', 'iphone'] },
+  { url: '/compress/', t: 'image compress', d: 'shrink jpg, png and webp files without a visible quality drop', tags: ['image'] },
+  { url: '/resize/', t: 'image resize', d: 'resize images by pixels or percent, keeps aspect ratio', tags: ['image'] },
+  { url: '/json/', t: 'json format', d: 'format, validate and minify json with error positions', tags: ['dev', 'text'] },
+  { url: '/base64/', t: 'base64', d: 'encode and decode base64 - text or whole files', tags: ['dev', 'text'] },
+  { url: '/colour/', t: 'colour convert', d: 'hex, rgb and hsl converter with shades and contrast', tags: ['design'] },
+];
+const grid = document.getElementById('grid');
+const render = (q) => {
+  grid.innerHTML = '';
+  for (const t of TOOLS) {
+    if (q && !(t.t + ' ' + t.d + ' ' + t.tags.join(' ')).toLowerCase().includes(q)) continue;
+    const a = document.createElement('a');
+    a.className = 'card'; a.href = t.url;
+    a.innerHTML = '<div class="t">' + t.t + '<span class="arrow">&rarr;</span></div><div class="d">' + t.d + '</div>' +
+      '<div class="tags">' + t.tags.map((x) => '<span class="tag">' + x + '</span>').join('') + '</div>';
+    grid.appendChild(a);
+  }
+};
+render('');
+document.getElementById('filter').addEventListener('input', (e) => render(e.target.value.trim().toLowerCase()));
+</script>
 </body>
 </html>

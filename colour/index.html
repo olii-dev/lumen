@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>colour convert - lumen</title>
+<link rel="stylesheet" href="/assets/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><circle cx='8' cy='8' r='6' fill='%237cc7ff'/></svg>">
+</head>
+<body data-tool="colour convert">
+<main>
+  <div class="panel">
+    <div class="controls" style="margin:0 0 12px; padding:0; border:0; background:none">
+      <div class="ctl"><label for="hexin">hex</label><input id="hexin" type="text" value="#7cc7ff" style="width:100px"></div>
+      <div class="ctl"><label for="rgbin">rgb</label><input id="rgbin" type="text" style="width:170px"></div>
+      <div class="ctl"><label for="hslin">hsl</label><input id="hslin" type="text" style="width:170px"></div>
+      <div class="ctl"><label for="pick">pick</label><input id="pick" type="color" value="#7cc7ff" style="width:44px;height:34px;padding:2px;background:var(--panel2);border:1px solid var(--border2);border-radius:7px"></div>
+    </div>
+    <div class="swatch" id="swatch"></div>
+    <div class="shades" id="shades"></div>
+    <div class="kv" style="margin-top:14px" id="kv"></div>
+  </div>
+  <p class="hint" style="margin-top:14px">click a value or a shade to copy it.</p>
+</main>
+<script src="/assets/common.js"></script>
+<script>
+(() => {
+  const hexin = document.getElementById('hexin'), rgbin = document.getElementById('rgbin'), hslin = document.getElementById('hslin');
+  const pick = document.getElementById('pick'), swatch = document.getElementById('swatch'), shades = document.getElementById('shades'), kv = document.getElementById('kv');
+
+  const rgbToHsl = (r, g, b) => {
+    r /= 255; g /= 255; b /= 255;
+    const mx = Math.max(r, g, b), mn = Math.min(r, g, b);
+    let h = 0, s = 0; const l = (mx + mn) / 2;
+    if (mx !== mn) {
+      const d = mx - mn;
+      s = l > 0.5 ? d / (2 - mx - mn) : d / (mx + mn);
+      if (mx === r) h = (g - b) / d + (g < b ? 6 : 0);
+      else if (mx === g) h = (b - r) / d + 2;
+      else h = (r - g) / d + 4;
+      h *= 60;
+    }
+    return [Math.round(h), Math.round(s * 100), Math.round(l * 100)];
+  };
+  const hslToRgb = (h, s, l) => {
+    h /= 360; s /= 100; l /= 100;
+    if (s === 0) { const v = Math.round(l * 255); return [v, v, v]; }
+    const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+    const p = 2 * l - q;
+    const f = (t) => {
+      if (t < 0) t += 1; if (t > 1) t -= 1;
+      if (t < 1 / 6) return p + (q - p) * 6 * t;
+      if (t < 1 / 2) return q;
+      if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
+      return p;
+    };
+    return [f(h + 1 / 3), f(h), f(h - 1 / 3)].map((v) => Math.round(v * 255));
+  };
+  const toHex = (r, g, b) => '#' + [r, g, b].map((v) => v.toString(16).padStart(2, '0')).join('');
+  const lum = (r, g, b) => {
+    const f = (c) => { c /= 255; return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4); };
+    return 0.2126 * f(r) + 0.7152 * f(g) + 0.0722 * f(b);
+  };
+  const contrast = (l1, l2) => ((Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05)).toFixed(2) + ':1';
+
+  let updating = false;
+  function render(r, g, b, source) {
+    if (updating) return; updating = true;
+    const hex = toHex(r, g, b);
+    const [h, s, l] = rgbToHsl(r, g, b);
+    if (source !== hexin) hexin.value = hex;
+    if (source !== rgbin) rgbin.value = r + ', ' + g + ', ' + b;
+    if (source !== hslin) hslin.value = h + ', ' + s + '%, ' + l + '%';
+    if (source !== pick) pick.value = hex;
+    swatch.style.background = hex;
+    const L0 = lum(r, g, b);
+    const rows = [
+      ['hex', hex], ['rgb', 'rgb(' + r + ', ' + g + ', ' + b + ')'], ['hsl', 'hsl(' + h + ', ' + s + '%, ' + l + '%)'],
+      ['contrast on white', contrast(L0, 1)], ['contrast on black', contrast(L0, 0)],
+    ];
+    kv.innerHTML = '';
+    for (const [k, v] of rows) {
+      const kd = document.createElement('span'); kd.className = 'k'; kd.textContent = k;
+      const vd = document.createElement('span'); vd.className = 'v'; vd.textContent = v; vd.style.cursor = 'pointer';
+      vd.title = 'copy';
+      vd.addEventListener('click', (e) => L.copy(v, null));
+      const cd = document.createElement('button'); cd.textContent = 'copy'; cd.style.padding = '2px 8px'; cd.style.fontSize = '11px';
+      cd.addEventListener('click', (e) => L.copy(v, e.target));
+      kv.append(kd, vd, cd);
+    }
+    shades.innerHTML = '';
+    for (let i = 1; i <= 9; i++) {
+      const nl = Math.round((i / 10) * 100);
+      const [sr, sg, sb] = hslToRgb(h, s, nl);
+      const shex = toHex(sr, sg, sb);
+      const d = document.createElement('div');
+      d.style.background = shex; d.title = shex;
+      d.addEventListener('click', () => { hexin.value = shex; render(sr, sg, sb, null); });
+      shades.appendChild(d);
+    }
+    updating = false;
+  }
+
+  const parseHex = (v) => {
+    const m = v.trim().replace(/^#/, '');
+    if (/^[0-9a-f]{3}$/i.test(m)) return m.split('').map((c) => parseInt(c + c, 16));
+    if (/^[0-9a-f]{6}$/i.test(m)) return [parseInt(m.slice(0, 2), 16), parseInt(m.slice(2, 4), 16), parseInt(m.slice(4, 6), 16)];
+    return null;
+  };
+  const parseRgb = (v) => {
+    const m = v.match(/(\d{1,3})\D+(\d{1,3})\D+(\d{1,3})/);
+    if (!m) return null;
+    const p = [+m[1], +m[2], +m[3]];
+    return p.every((x) => x <= 255) ? p : null;
+  };
+  const parseHsl = (v) => {
+    const m = v.match(/(\d{1,3})\D+(\d{1,3})\D+(\d{1,3})/);
+    if (!m) return null;
+    const [h, s, l] = [+m[1], +m[2], +m[3]];
+    return h <= 360 && s <= 100 && l <= 100 ? hslToRgb(h, s, l) : null;
+  };
+
+  hexin.addEventListener('input', () => { const p = parseHex(hexin.value); if (p) render(p[0], p[1], p[2], hexin); });
+  rgbin.addEventListener('input', () => { const p = parseRgb(rgbin.value); if (p) render(p[0], p[1], p[2], rgbin); });
+  hslin.addEventListener('input', () => { const p = parseHsl(hslin.value); if (p) render(p[0], p[1], p[2], hslin); });
+  pick.addEventListener('input', () => { const p = parseHex(pick.value); render(p[0], p[1], p[2], pick); });
+  render(124, 199, 255, null);
+})();
+</script>
+</body>
+</html>

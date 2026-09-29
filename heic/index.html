@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>heic convert - lumen</title>
+<link rel="stylesheet" href="/assets/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><circle cx='8' cy='8' r='6' fill='%237cc7ff'/></svg>">
+</head>
+<body data-tool="heic convert">
+<main>
+  <section id="dropzone" class="dropzone" tabindex="0">
+    <div class="dz-inner">
+      <div class="dz-title">drop .heic files here</div>
+      <div class="dz-sub">or click to browse &middot; multiple files fine</div>
+    </div>
+    <input id="fileInput" type="file" accept=".heic,.heif,image/heic,image/heif" multiple hidden>
+  </section>
+
+  <section id="controls" class="controls" hidden>
+    <div class="ctl">
+      <label for="format">format</label>
+      <select id="format">
+        <option value="jpeg" selected>jpg</option>
+        <option value="png">png</option>
+        <option value="webp">webp</option>
+      </select>
+    </div>
+    <div class="ctl">
+      <label for="quality">quality <span id="qualityVal">92</span></label>
+      <input id="quality" type="range" min="40" max="100" value="92" style="width:150px">
+    </div>
+    <div class="ctl ctl-summary"><span id="summary"></span></div>
+    <button id="downloadAll" class="primary" disabled>download all (.zip)</button>
+    <button id="clearAll" class="ghost">clear</button>
+  </section>
+
+  <section id="list" class="list"></section>
+
+  <p class="hint" style="margin-top:18px">heic decoding runs on your device via libheif. re-encoding uses your browser's image encoder. files never leave this tab.</p>
+</main>
+<script src="/assets/common.js"></script>
+<script src="/vendor/heic2any.min.js"></script>
+<script src="/vendor/jszip.min.js"></script>
+<script src="/heic/heic.js"></script>
+</body>
+</html>

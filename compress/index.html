@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>image compress - lumen</title>
+<link rel="stylesheet" href="/assets/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><circle cx='8' cy='8' r='6' fill='%237cc7ff'/></svg>">
+</head>
+<body data-tool="image compress">
+<main>
+  <section id="dropzone" class="dropzone" tabindex="0">
+    <div class="dz-title">drop images here</div>
+    <div class="dz-sub">jpg, png, webp, gif &middot; multiple files fine</div>
+    <input id="fileInput" type="file" accept="image/jpeg,image/png,image/webp,image/gif" multiple hidden>
+  </section>
+
+  <section id="controls" class="controls" hidden>
+    <div class="ctl">
+      <label for="format">format</label>
+      <select id="format">
+        <option value="same" selected>same</option>
+        <option value="jpeg">jpg</option>
+        <option value="webp">webp</option>
+        <option value="png">png</option>
+      </select>
+    </div>
+    <div class="ctl">
+      <label for="quality">quality <span id="qualityVal">85</span></label>
+      <input id="quality" type="range" min="40" max="100" value="85" style="width:150px">
+    </div>
+    <div class="ctl ctl-summary"><span id="summary"></span></div>
+    <button id="downloadAll" class="primary" disabled>download all (.zip)</button>
+    <button id="clearAll" class="ghost">clear</button>
+  </section>
+
+  <section id="list" class="list"></section>
+  <p class="hint" style="margin-top:18px">re-encoding uses your browser's image encoder. files never leave this tab.</p>
+</main>
+<script src="/assets/common.js"></script>
+<script src="/vendor/jszip.min.js"></script>
+<script src="/compress/compress.js"></script>
+</body>
+</html>

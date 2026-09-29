@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>image resize - lumen</title>
+<link rel="stylesheet" href="/assets/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><circle cx='8' cy='8' r='6' fill='%237cc7ff'/></svg>">
+</head>
+<body data-tool="image resize">
+<main>
+  <section id="dropzone" class="dropzone" tabindex="0">
+    <div class="dz-title">drop images here</div>
+    <div class="dz-sub">jpg, png, webp &middot; multiple files fine</div>
+    <input id="fileInput" type="file" accept="image/jpeg,image/png,image/webp" multiple hidden>
+  </section>
+
+  <section id="controls" class="controls" hidden>
+    <div class="ctl">
+      <label for="mode">by</label>
+      <select id="mode">
+        <option value="width" selected>width px</option>
+        <option value="percent">percent</option>
+      </select>
+    </div>
+    <div class="ctl">
+      <label for="width">width</label>
+      <input id="width" type="number" min="1" max="12000" value="1080">
+    </div>
+    <div class="ctl" id="pctCtl" hidden>
+      <label for="percent">%</label>
+      <input id="percent" type="number" min="1" max="400" value="50">
+    </div>
+    <div class="ctl">
+      <label for="format">format</label>
+      <select id="format">
+        <option value="same" selected>same</option>
+        <option value="jpeg">jpg</option>
+        <option value="webp">webp</option>
+        <option value="png">png</option>
+      </select>
+    </div>
+    <div class="ctl ctl-summary"><span id="summary"></span></div>
+    <button id="downloadAll" class="primary" disabled>download all (.zip)</button>
+    <button id="clearAll" class="ghost">clear</button>
+  </section>
+
+  <section id="list" class="list"></section>
+  <p class="hint" style="margin-top:18px">aspect ratio is kept. resizing runs in your browser - files never leave this tab.</p>
+</main>
+<script src="/assets/common.js"></script>
+<script src="/vendor/jszip.min.js"></script>
+<script src="/resize/resize.js"></script>
+</body>
+</html>
