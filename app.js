@@ -74,7 +74,13 @@
   async function decode(item) {
     setStatus(item, 'decoding', 'working');
     try {
-      const blob = await heic2any({ blob: item.file, toType: 'image/png' });
+      console.log('[lumen] decode start', item.file.name, item.file.size);
+      const t0 = performance.now();
+      const blob = await Promise.race([
+        heic2any({ blob: item.file, toType: 'image/png' }),
+        new Promise((_, rej) => setTimeout(() => rej(new Error('decode timeout after 25s')), 25000)),
+      ]);
+      console.log('[lumen] heic2any done in', Math.round(performance.now() - t0), 'ms');
       const bmp = await createImageBitmap(Array.isArray(blob) ? blob[0] : blob);
       const canvas = document.createElement('canvas');
       canvas.width = bmp.width;
@@ -85,8 +91,9 @@
       item.thumbEl.hidden = false;
       await encode(item);
     } catch (e) {
+      console.error('[lumen] decode failed', e && e.message, e);
       item.failed = true;
-      setStatus(item, 'failed: not a readable heic', 'err');
+      setStatus(item, 'failed: ' + ((e && e.message) || 'not a readable heic'), 'err');
       item.sizesEl.textContent = fmtBytes(item.file.size);
       refreshSummary();
     }
