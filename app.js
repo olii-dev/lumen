@@ -60,9 +60,15 @@
       item.nameEl.appendChild(ext);
       item.baseName = base;
       item.dlBtn.addEventListener('click', () => downloadOne(item));
-      decode(item);
+      queueDecode(item);
     }
     refreshSummary();
+  }
+
+  let decodeQueue = Promise.resolve();
+  function queueDecode(item) {
+    decodeQueue = decodeQueue.then(() => decode(item));
+    return decodeQueue;
   }
 
   async function decode(item) {
