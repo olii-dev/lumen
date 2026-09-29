@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en-AU">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>file hash - lumen</title><link rel="stylesheet" href="/assets/style.css"></head>
+<body data-tool="file hash">
+<main>
+  <section class="dropzone" id="dropzone" tabindex="0" role="button" aria-label="Choose a file to hash">
+    <div class="dz-title">drop a file to hash it</div><div class="dz-sub">sha-256, computed in this tab</div>
+    <input type="file" id="fileInput" hidden>
+  </section>
+  <div class="panel stack">
+    <label class="hint" for="textInput">or hash text (UTF-8)</label>
+    <textarea id="textInput" class="big" placeholder="paste text here" spellcheck="false"></textarea>
+    <div class="controls" style="margin:0;padding:0;border:0;background:none"><button id="hashText" class="primary">hash text</button><button id="clear" class="ghost">clear</button></div>
+  </div>
+  <div class="panel stack" aria-live="polite">
+    <div class="hint" id="source">no input yet</div>
+    <label class="hint" for="digest">sha-256</label>
+    <div class="hash-result"><input type="text" id="digest" readonly aria-label="SHA-256 checksum"><button id="copy" disabled>copy</button></div>
+    <label class="hint" for="expected">compare with a known sha-256 checksum</label>
+    <input type="text" id="expected" placeholder="paste expected 64-character hex checksum" autocomplete="off" spellcheck="false">
+    <div class="msg" id="comparison"></div>
+  </div>
+  <p class="hint" style="margin-top:14px">nothing is uploaded. very large files need enough free device memory to hash in one pass.</p>
+</main>
+<script src="/assets/common.js"></script><script src="/hash/hash.js"></script>
+</body></html>

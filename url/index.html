@@ -1,0 +1,20 @@
+<!doctype html><html lang="en-AU"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>url tools - lumen</title><link rel="stylesheet" href="/assets/style.css"></head>
+<body data-tool="url tools"><main>
+  <div class="panel stack">
+    <label for="input" class="hint">text or URL</label>
+    <textarea id="input" class="big" spellcheck="false" placeholder="paste text or a URL"></textarea>
+    <div class="controls" style="margin:0;padding:0;border:0;background:none">
+      <button id="encode" class="primary">encode component</button><button id="decode">decode component</button>
+      <button id="inspect">inspect URL</button><button id="clear" class="ghost">clear</button>
+    </div>
+    <div id="message" class="msg" aria-live="polite"></div>
+    <label for="output" class="hint">output</label>
+    <textarea id="output" class="big" readonly spellcheck="false" placeholder="output"></textarea>
+    <button id="copy">copy output</button>
+  </div>
+  <div class="panel stack" id="details" hidden>
+    <div class="hint">URL parts</div><div id="parts" class="url-parts"></div>
+    <div class="hint">query parameters (repeated keys shown separately)</div><div id="params" class="url-parts"></div>
+  </div>
+  <p class="hint" style="margin-top:14px">encode component is for a value inside a URL, not an entire URL. parsing stays in your browser.</p>
+</main><script src="/assets/common.js"></script><script src="/url/url.js"></script></body></html>
