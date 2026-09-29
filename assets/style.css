@@ -136,8 +136,11 @@ textarea.big { width: 100%; min-height: 180px; resize: vertical; line-height: 1.
 .hint { color: var(--dimmer); font-size: 11.5px; }
 /* hash and URL utilities */
 .hash-result { display: flex; gap: 8px; min-width: 0; }
-.hash-result input { flex: 1; min-width: 0; font-size: 12px; }
+.hash-result textarea { flex: 1; min-width: 0; min-height: 65px; resize: none; overflow-wrap: anywhere; font-size: 12px; }
 .hash-result button { flex: none; }
 .url-parts { display: grid; gap: 5px; }
 .url-part { display: grid; grid-template-columns: minmax(90px, 150px) minmax(0, 1fr); gap: 12px; font: 12px/1.5 var(--mono); padding: 5px 0; border-top: 1px solid var(--border); overflow-wrap: anywhere; }
 @media (max-width: 480px) { .url-part { grid-template-columns: minmax(70px, 95px) minmax(0, 1fr); } }
+
+/* compact URL input/output so parsed parts stay close to the action */
+body[data-tool="url tools"] textarea.big { min-height: 92px; }
