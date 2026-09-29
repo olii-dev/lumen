@@ -11,6 +11,7 @@
   const clearAll = document.getElementById('clearAll');
 
   const items = new Map(); // id -> item
+  window.__lumen = items;
   let nextId = 1;
 
   const fmtBytes = (n) => {
@@ -27,6 +28,8 @@
     if (!arr.length) return;
     controls.hidden = false;
     for (const f of arr) {
+      const dupe = [...items.values()].some((i) => i.file.name === f.name && i.file.size === f.size);
+      if (dupe) continue;
       const id = nextId++;
       const row = document.createElement('div');
       row.className = 'row';
