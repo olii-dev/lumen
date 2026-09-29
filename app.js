@@ -30,6 +30,7 @@
     for (const f of arr) {
       const dupe = [...items.values()].some((i) => i.file.name === f.name && i.file.size === f.size);
       if (dupe) continue;
+      if (f.size === 0) continue; // stale 0-byte re-fire from some pickers
       const id = nextId++;
       const row = document.createElement('div');
       row.className = 'row';
@@ -78,7 +79,7 @@
       const t0 = performance.now();
       const blob = await Promise.race([
         heic2any({ blob: item.file, toType: 'image/png' }),
-        new Promise((_, rej) => setTimeout(() => rej(new Error('decode timeout after 25s')), 25000)),
+        new Promise((_, rej) => setTimeout(() => rej(new Error('decode timed out - try again')), 60000)),
       ]);
       console.log('[lumen] heic2any done in', Math.round(performance.now() - t0), 'ms');
       const bmp = await createImageBitmap(Array.isArray(blob) ? blob[0] : blob);
