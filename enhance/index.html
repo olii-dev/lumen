@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en-AU">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>image enhance - lumen</title><link rel="stylesheet" href="/assets/style.css"><link rel="stylesheet" href="/enhance/enhance.css"><link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><circle cx='8' cy='8' r='6' fill='%237cc7ff'/></svg>"></head>
+<body data-tool="image enhance"><main>
+<div class="intro"><div><h1>give your image a better finish.</h1><p>clean up noise, bring out detail and lift flat light. entirely on your device.</p></div><span class="tag">local processing</span></div>
+<section id="dropzone" class="dropzone" tabindex="0" role="button" aria-label="Choose an image"><div class="dz-title">drop an image here</div><div class="dz-sub">or click to choose · jpg, png, webp · up to 40 MB</div><input id="fileInput" type="file" accept="image/jpeg,image/png,image/webp" hidden></section>
+<p id="message" class="msg" role="status" aria-live="polite"></p>
+<section id="workspace" hidden>
+<div class="filebar"><span id="filename"></span><span id="dimensions"></span><button id="clear" class="ghost">change image</button></div>
+<div class="editor">
+<aside class="settings panel">
+<div class="section-label">01 / finish</div>
+<div class="presets" role="group" aria-label="Enhancement presets"><button data-preset="natural" aria-pressed="true">natural</button><button data-preset="crisp" aria-pressed="false">crisp</button><button data-preset="lowlight" aria-pressed="false">low light</button></div>
+<div class="slider"><label for="detail">detail <output id="detailValue">35</output></label><input id="detail" type="range" min="0" max="100" value="35"></div>
+<div class="slider"><label for="noise">noise cleanup <output id="noiseValue">15</output></label><input id="noise" type="range" min="0" max="100" value="15"></div>
+<div class="slider"><label for="light">light &amp; contrast <output id="lightValue">30</output></label><input id="light" type="range" min="0" max="100" value="30"></div>
+<div class="slider"><label for="colour">colour <output id="colourValue">15</output></label><input id="colour" type="range" min="0" max="100" value="15"></div>
+<div class="section-label">02 / resolution</div>
+<label class="select-label" for="engine">method</label><select id="engine"><option value="fast">precise / fast</option><option value="ai">AI detail / 2×</option></select>
+<p id="engineNote" class="hint">edge-aware cleanup + high-quality resampling. no invented detail.</p>
+<label class="select-label" for="scale">output size</label><select id="scale"><option value="1">original size</option><option value="2">2× larger</option><option value="4">4× larger</option></select>
+<p id="target" class="hint"></p>
+<button id="apply" class="primary">enhance image</button><button id="cancel" class="ghost" hidden>cancel processing</button>
+<progress id="progress" max="100" value="0" hidden></progress><p id="status" role="status" aria-live="polite">ready when you are</p>
+</aside>
+<div class="result">
+<div class="previewbar"><span>before / after</span><button id="zoom" class="ghost" aria-pressed="false">view at 100%</button></div>
+<div id="viewport"><div id="compare"><img id="before" alt="Original image"><img id="after" alt="Enhanced image" hidden><div id="divider" hidden></div><span class="badge before">original</span><span id="afterBadge" class="badge after" hidden>enhanced</span></div></div>
+<div class="compare-control"><label for="split">compare</label><input id="split" type="range" min="0" max="100" value="50" aria-label="Before and after split" disabled></div>
+<div class="export panel"><div><label for="format">save as</label><select id="format"><option value="image/png">png / lossless</option><option value="image/jpeg">jpg / 95%</option><option value="image/webp">webp / 95%</option></select></div><button id="download" disabled>download enhanced</button><p id="exportNote" class="hint">png and webp keep transparency. jpg uses a white background.</p><p id="resultInfo" class="hint"></p></div>
+</div></div>
+<p class="limits">a cleaner image, not a time machine. sharpening cannot recover missing focus. AI can infer detail that was never there, so avoid it for evidence or exact text. AI is optional, runs locally and is limited to 1 megapixel / 1024 px per side. larger photos use the fast method. exports strip metadata and use browser-rendered sRGB.</p>
+</section>
+</main><script src="/assets/common.js"></script><script src="/vendor/pica.min.js"></script><script src="/enhance/enhance.js"></script></body></html>

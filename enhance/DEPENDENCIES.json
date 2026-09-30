@@ -1,0 +1,7 @@
+{
+  "pica": "10.0.3",
+  "upscaler": "1.0.0",
+  "@upscalerjs/esrgan-slim": "1.0.0",
+  "@tensorflow/tfjs": "4.11.0",
+  "esbuild": "0.28.2"
+}
