@@ -1,4 +1,6 @@
 window.L = (() => {
+  const base = new URL('../', document.currentScript.src);
+  const url = path => new URL(path.replace(/^\//, ''), base).href;
   const fmtBytes = (n) => {
     if (n == null) return '-';
     if (n < 1024) return n + ' B';
@@ -31,7 +33,7 @@ window.L = (() => {
     const note = document.body.dataset.note || 'no uploads - everything runs in your browser';
     const h = document.createElement('header');
     h.className = 'site';
-    h.innerHTML = '<a class="wordmark" href="/">lumen</a>' +
+    h.innerHTML = '<a class="wordmark" href="' + base.href + '">lumen</a>' +
       (tool ? '<span class="crumb">/ <b>' + tool + '</b></span>' : '') +
       '<span class="note">' + note + '</span>';
     document.body.prepend(h);
@@ -50,5 +52,5 @@ window.L = (() => {
     el.addEventListener('drop', (e) => cb([...e.dataTransfer.files]));
   };
   document.addEventListener('DOMContentLoaded', mountHeader);
-  return { fmtBytes, pct, download, copy, dropzone };
+  return { url, fmtBytes, pct, download, copy, dropzone };
 })();

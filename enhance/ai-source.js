@@ -7,7 +7,7 @@ self.onmessage=async({data:{buffer,width,height}})=>{
   if(!new OffscreenCanvas(1,1).getContext('webgl2')&&!new OffscreenCanvas(1,1).getContext('webgl'))throw Error('AI needs WebGL on this browser. Use precise / fast instead.');
   await tf.setBackend('webgl');await tf.ready();
   self.postMessage({progress:4,label:'loading local AI model'});
-  upscaler ||= new Upscaler({model:{path:'/enhance/models/x2/model.json',scale:2,modelType:'layers',inputRange:[0,255],outputRange:[0,255]}});
+  upscaler ||= new Upscaler({model:{path:new URL('models/x2/model.json',self.location.href).href,scale:2,modelType:'layers',inputRange:[0,255],outputRange:[0,255]}});
   const rgba=new Uint8ClampedArray(buffer),rgb=new Uint8Array(width*height*3);
   for(let i=0;i<width*height;i++){rgb[i*3]=rgba[i*4];rgb[i*3+1]=rgba[i*4+1];rgb[i*3+2]=rgba[i*4+2];}
   input=tf.tensor3d(rgb,[height,width,3]);

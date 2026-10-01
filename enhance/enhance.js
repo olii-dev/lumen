@@ -24,9 +24,9 @@
   releaseResult();setBusy(true);message('');$('progress').value=0;$('status').textContent='preparing pixels';
   try{const source=document.createElement('canvas');source.width=bitmap.width;source.height=bitmap.height;const ctx=source.getContext('2d',{willReadFrequently:true});ctx.drawImage(bitmap,0,0);let image=ctx.getImageData(0,0,source.width,source.height);
    if(ai){for(let i=3;i<image.data.length;i+=4)if(image.data[i]!==255)throw Error('AI does not keep transparency. Use precise / fast for this image.');}
-   image=await runWorker('/enhance/finish-worker.js',image,s,ticket,0,ai?.16:.65);if(ticket!==job)return;source.getContext('2d').putImageData(image,0,0);
+   image=await runWorker(L.url('/enhance/finish-worker.js'),image,s,ticket,0,ai?.16:.65);if(ticket!==job)return;source.getContext('2d').putImageData(image,0,0);
    let output;
-   if(ai){image=await runWorker('/enhance/ai-worker.js',image,null,ticket,18,.75);if(ticket!==job)return;output=document.createElement('canvas');output.width=image.width;output.height=image.height;output.getContext('2d').putImageData(image,0,0);}
+   if(ai){image=await runWorker(L.url('/enhance/ai-worker.js'),image,null,ticket,18,.75);if(ticket!==job)return;output=document.createElement('canvas');output.width=image.width;output.height=image.height;output.getContext('2d').putImageData(image,0,0);}
    else if(scale===1){output=source;}
    else {output=document.createElement('canvas');output.width=source.width*scale;output.height=source.height*scale;$('status').textContent='resampling at full resolution';$('progress').value=70;const cancelToken=new Promise((_,reject)=>{resizeReject=reject;});await resizer.resize(source,output,{filter:'mks2013',cancelToken});resizeReject=null;}
    if(ticket!==job)return;$('status').textContent='preparing comparison';const blob=await new Promise((resolve,reject)=>output.toBlob(b=>b?resolve(b):reject(Error('Could not encode this image. Try a smaller output.')),'image/png'));if(ticket!==job)return;

@@ -9,7 +9,7 @@ Local batch transcoding, not dynamic-range compression. Web Audio decodes each c
 
 Opus is the efficient default. MP3 is the compatibility option. No claim of lossless output, guaranteed transparency or one codec being best on every source. Repeated lossy encoding can degrade sound. Metadata/artwork are not retained. Output can be bigger than input: actual size and the larger-result warning are shown without discarding the original. The slider is bitrate, not a scientific percentage of quality. VBR estimates are approximate.
 
-20-file / 80 MB input-file / 10-minute decoded-duration caps, mono/stereo only. decodeAudioData necessarily loads complete files; compressed duration cannot always be known before decode. Cancel stops worker encoding; an in-flight browser decode cannot be interrupted, but its result is discarded. Files are decoded sequentially. Huge or unusual files are still best handled in a native app. A/B playback switches at the same approximate media timestamp; lossy codec delay may prevent sample-exact alignment. Format support depends on browser, not the extension picker. No microphone permissions needed.
+100-file / 500 MB total input / 512 MB total output / 80 MB input-file / 10-minute decoded-duration caps, mono/stereo only. decodeAudioData necessarily loads complete files; compressed duration cannot always be known before decode. Cancel stops worker encoding; an in-flight browser decode cannot be interrupted, but its result is discarded. Files are decoded sequentially. Huge or unusual files are still best handled in a native app. A/B playback switches at the same approximate media timestamp; lossy codec delay may prevent sample-exact alignment. Format support depends on browser, not the extension picker. No microphone permissions needed.
 
 ## Build
 
@@ -29,3 +29,7 @@ Chromium: stereo + mono WAV bulk encoded with both codecs, A/B loaded, ZIP verif
 - https://libopus-wasm.dev/browser.html
 - https://www.rfc-editor.org/rfc/rfc7845
 - https://opus-codec.org/
+
+WAV input and output supported. PCM WAV has 16/24-bit and 22.05/44.1/48 kHz options; it is uncompressed, not a smaller-file guarantee. Tested FFprobe confirms stereo pcm_s24le and pcm_s16le at 22,050 Hz, exactly 6 seconds. WAV does not imply lossless recovery after browser resampling/quantisation.
+
+All HTML, common header, workers and model assets are project-base safe for GitHub Pages under /lumen/ as well as the original root-hosted Pages site.

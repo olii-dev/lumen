@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>lumen - quick tools</title>
-<link rel="stylesheet" href="/assets/style.css">
+<link rel="stylesheet" href="./assets/style.css">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><circle cx='8' cy='8' r='6' fill='%237cc7ff'/></svg>">
 </head>
 <body data-note="quick tools, no uploads">
@@ -13,19 +13,19 @@
   <div class="filter-row"><input id="filter" type="text" placeholder="filter tools" autocomplete="off"></div>
   <div class="grid" id="grid"></div>
 </main>
-<script src="/assets/common.js"></script>
+<script src="./assets/common.js"></script>
 <script>
 const TOOLS = [
-  { url: '/heic/', t: 'heic convert', d: 'iphone heic photos to jpg, png or webp with quality control', tags: ['image', 'iphone'] },
-  { url: '/compress/', t: 'image compress', d: 'shrink jpg, png and webp files without a visible quality drop', tags: ['image'] },
-  { url: '/enhance/', t: 'image enhance', d: 'clean up noise, lift light and sharpen detail, with optional local AI 2×', tags: ['image', 'photo'] },
-  { url: '/resize/', t: 'image resize', d: 'resize images by pixels or percent, keeps aspect ratio', tags: ['image'] },
-  { url: '/audio/', t: 'audio compress', d: 'bulk Opus or MP3 compression, quality control and before/after listening', tags: ['audio', 'file'] },
-  { url: '/json/', t: 'json format', d: 'format, validate and minify json with error positions', tags: ['dev', 'text'] },
-  { url: '/base64/', t: 'base64', d: 'encode and decode base64 - text or whole files', tags: ['dev', 'text'] },
-  { url: '/colour/', t: 'colour convert', d: 'hex, rgb and hsl converter with shades and contrast', tags: ['design'] },
-  { url: '/hash/', t: 'file hash', d: 'sha-256 checksum for a file or text, with local comparison', tags: ['dev', 'file'] },
-  { url: '/url/', t: 'url tools', d: 'encode, decode and inspect query parameters', tags: ['dev', 'text'] },
+  { url: './heic/', t: 'heic convert', d: 'iphone heic photos to jpg, png or webp with quality control', tags: ['image', 'iphone'] },
+  { url: './compress/', t: 'image compress', d: 'shrink jpg, png and webp files without a visible quality drop', tags: ['image'] },
+  { url: './enhance/', t: 'image enhance', d: 'clean up noise, lift light and sharpen detail, with optional local AI 2×', tags: ['image', 'photo'] },
+  { url: './resize/', t: 'image resize', d: 'resize images by pixels or percent, keeps aspect ratio', tags: ['image'] },
+  { url: './audio/', t: 'audio compress', d: 'bulk Opus or MP3 compression, quality control and before/after listening', tags: ['audio', 'file'] },
+  { url: './json/', t: 'json format', d: 'format, validate and minify json with error positions', tags: ['dev', 'text'] },
+  { url: './base64/', t: 'base64', d: 'encode and decode base64 - text or whole files', tags: ['dev', 'text'] },
+  { url: './colour/', t: 'colour convert', d: 'hex, rgb and hsl converter with shades and contrast', tags: ['design'] },
+  { url: './hash/', t: 'file hash', d: 'sha-256 checksum for a file or text, with local comparison', tags: ['dev', 'file'] },
+  { url: './url/', t: 'url tools', d: 'encode, decode and inspect query parameters', tags: ['dev', 'text'] },
 ];
 const grid = document.getElementById('grid');
 const render = (q) => {
