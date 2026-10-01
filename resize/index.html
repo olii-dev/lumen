@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>image resize - lumen</title>
 <link rel="stylesheet" href="../assets/style.css">
+<link rel="stylesheet" href="./crop.css">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><circle cx='8' cy='8' r='6' fill='%237cc7ff'/></svg>">
 </head>
 <body data-tool="image resize">
@@ -46,10 +47,19 @@
   </section>
 
   <section id="list" class="list"></section>
-  <p class="hint" style="margin-top:18px">aspect ratio is kept. resizing runs in your browser - files never leave this tab.</p>
+  <p class="hint" style="margin-top:18px">crop each image before resizing. aspect ratio of the crop is kept. resizing runs in your browser - files never leave this tab.</p>
 </main>
+<dialog id="cropDialog" aria-labelledby="cropTitle">
+  <div class="crop-head"><div><h2 id="cropTitle">crop image</h2><p id="cropName"></p></div><button id="cropClose" aria-label="Close crop editor">close</button></div>
+  <div class="crop-toolbar"><label for="cropRatio">aspect ratio</label><select id="cropRatio"><option value="free">free</option><option value="original">original</option><option value="1">1:1</option><option value="1.3333333333">4:3</option><option value="0.75">3:4</option><option value="1.5">3:2</option><option value="0.6666666667">2:3</option><option value="1.7777777778">16:9</option><option value="0.5625">9:16</option></select><button id="cropReset">full image</button></div>
+  <div class="crop-viewport"><div id="cropStage"><canvas id="cropCanvas"></canvas><div id="cropBox" tabindex="0" role="group" aria-label="Crop selection. Arrow keys move; Shift moves ten pixels."><div class="crop-grid"></div><button class="handle nw" data-handle="nw" aria-label="Top left crop handle"></button><button class="handle ne" data-handle="ne" aria-label="Top right crop handle"></button><button class="handle sw" data-handle="sw" aria-label="Bottom left crop handle"></button><button class="handle se" data-handle="se" aria-label="Bottom right crop handle"></button><button class="handle n" data-handle="n" aria-label="Top crop handle"></button><button class="handle s" data-handle="s" aria-label="Bottom crop handle"></button><button class="handle w" data-handle="w" aria-label="Left crop handle"></button><button class="handle e" data-handle="e" aria-label="Right crop handle"></button></div></div></div>
+  <p class="crop-help">drag the selection to move it, or drag a handle to resize. touch works too. arrow keys move the selection or focused handle.</p>
+  <div class="crop-coordinates"><label>x <input id="cropX" type="number" min="0" step="1"></label><label>y <input id="cropY" type="number" min="0" step="1"></label><label>width <input id="cropW" type="number" min="1" step="1"></label><label>height <input id="cropH" type="number" min="1" step="1"></label></div>
+  <div class="crop-foot"><span id="cropInfo" role="status" aria-live="polite"></span><button id="cropCancel">cancel</button><button id="cropApply" class="primary">apply crop</button></div>
+</dialog>
 <script src="../assets/common.js"></script>
 <script src="../vendor/jszip.min.js"></script>
+<script src="./crop.js"></script>
 <script src="../resize/resize.js"></script>
 </body>
 </html>

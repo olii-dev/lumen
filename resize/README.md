@@ -1,0 +1,9 @@
+# Resize and manual crop
+
+Crop is per-file, kept in source image pixel coordinates. The editor uses a scaled canvas preview with an overlay; resizing the viewport cannot change the crop. Pointer events and capture cover mouse, touch and pen. Free selection supports eight handles; ratio-locked selection uses four corners with the opposite corner anchored. Selection can be dragged within the image. Keyboard arrows move it or the focused handle (Shift for 10 px). Numeric pixel fields are provided as a precise alternative.
+
+Ratios: free, original, 1:1, 4:3, 3:4, 3:2, 2:3, 16:9, 9:16. Application rounds to whole source pixels and clamps to the image, so ratios can differ by a pixel at small sizes. Reset and cancel are distinct: changes are drafts until Apply. Reopening starts from the saved crop. Originals and other files are untouched.
+
+Output width or percentage refers to the crop dimensions, not the old full image. Export uses drawImage's source rectangle, high-quality canvas resampling, PNG/WebP transparency or white JPG background. The resized file/ZIP includes the crop. Export callbacks carry a per-file version so stale results cannot win a setting-change race. Invalidated outputs cannot be downloaded. Clear closes bitmaps and ignores in-flight loads. Output limited to 24 MP and 12,000 px per side; decoded input limited to 24 MP.
+
+Local Chromium checks at /lumen/ base path: two independent files, mouse move and corner resize, 1:1 export 320×320, free numeric 120×80 export 320×213, reopening/cancel unchanged, percent export uses crop, touch CDP pointer resize, keyboard motion, clear and 390 px no overflow. Desktop/mobile screenshots inspected. This is not a physical iPhone/Safari test. Page scrolling outside the editor remains native; touch-action:none is scoped to the crop stage. Native dialog supplies modal focus handling and Escape cancellation.
