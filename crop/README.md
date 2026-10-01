@@ -1,0 +1,9 @@
+# Standalone crop
+
+Adds a dedicated hub card while keeping resize's crop editor. Shared manual crop geometry and touch/keyboard editor is in /resize/crop.js. Standalone ratios add 4:5 portrait posts and story-labelled 9:16. At this stage there is no free-angle straighten or pinch zoom; quarter-turn rotate, flips, manual selection and numeric coordinates are supported.
+
+Each image is decoded once, transformed from the original (not from the previous export), and cropped at original pixel size. Quarter rotations and flip transforms reset the crop because the coordinate frame changes. Global shape/format changes keep the saved crop. The circle option uses the centred square within the crop, not an elliptical stretch. Rounded corners use 8% of the shorter side. PNG/WebP preserve corner transparency; JPG composites on white. The PNG quality slider is disabled because PNG is lossless.
+
+Batch crop copying uses x/y/w/h proportions of the current transformed source, individually rounded and clamped. It does not detect or follow subjects and may differ in pixel ratio on differently shaped images; previews must be checked. Original files remain unchanged. No uploads, same-origin assets only. ZIP names include item IDs to avoid collisions. Clear closes original/transformed bitmaps and invalidates pending renders. Guards: 50 files, 40 MB each, 300 MB input, 24 MP per image, 60 MP decoded batch, 400 MB results.
+
+Tested at /lumen/ in Chromium: 320×240 rotation to 240×320, flip, 4:5 manual 160×200 crop, copy to a 128×128 image (proportional 85×80), circle 160×160 export transparent corner, JPG same dimensions white corner, batch ZIP, reset, 11-card hub and 390px no-overflow. Shared editor mouse/touch/keyboard tests live in resize/README.md. Screenshots inspected; no physical Safari device test.
